@@ -1,0 +1,26 @@
+/* ── Оверлеи ─────────────────────────────────────────────────────────── */
+html.overlay-open { overflow: hidden; }
+.ov { position: fixed; inset: 0; z-index: 1050; background: rgba(14, 23, 38, 0.55); animation: fade var(--t-overlay) var(--ease-overlay); }
+.ov-panel {
+  position: absolute; background: var(--paper); color: var(--ink); box-shadow: var(--shadow-overlay);
+  outline: none; overflow-y: auto;
+}
+.ov-modal .ov-panel {
+  left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 18px; max-height: calc(100vh - 48px);
+  width: min(1040px, calc(100vw - 32px)); padding: clamp(22px, 3vw, 40px);
+  animation: rise var(--t-overlay) var(--ease-overlay);
+}
+.ov-modal .ov-md { width: min(640px, calc(100vw - 32px)); }
+.ov-drawer .ov-panel {
+  top: 0; right: 0; bottom: 0; width: min(560px, 100vw); padding: clamp(24px, 3vw, 44px);
+  animation: slide var(--t-overlay) var(--ease-overlay);
+}
+.ov-close {
+  position: absolute; top: 18px; right: 18px; width: 40px; height: 40px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink); display: grid; place-items: center;
+}
+.ov-close:hover { border-color: var(--gold); }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); } }
+@keyframes slide { from { transform: translateX(24px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ov, .ov-panel { animation: none !important; } }

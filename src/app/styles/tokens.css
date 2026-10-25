@@ -1,0 +1,55 @@
+/* Токены бренда TableTools. Палитра утверждена владельцем 23.09.2026.
+   ⛔ Моноширинные шрифты не используются нигде — ни в подписях, ни в данных. */
+
+/* Шрифт Onest (с 24.09.2026, вместо Inter Tight) подключается через next/font/local в app/layout.tsx:
+   он сам делает preload и фолбэк с подогнанными метриками (без скачков строк). */
+
+:root {
+  /* Бренд */
+  --ink: #0e1726;
+  --ink-2: #111a29; /* поверхность на тёмном */
+  --ink-3: #182235; /* приподнятая поверхность на тёмном */
+  --line-dark: #24304a;
+  --gold: #c9a45c;
+  --gold-soft: #d9b872;
+  --gold-deep: #8a6a2e; /* золото для текста на светлом: контраст 4.6:1 на Ivory */
+  --ivory: #f4efe6;
+  --paper: #fbf8f2; /* лист-таблица поверх Ivory */
+  --steel: #8a94a6;
+  --steel-dark: #5b6475; /* подписи на светлом: контраст 5.2:1 */
+  --line: #e2dacb;
+
+  /* Семантика данных */
+  --good: #2f7d4f;
+  --bad: #b4533c;
+
+  /* Типографика */
+  --font: var(--font-onest), Helvetica, Arial, sans-serif;
+  --fs-hero: clamp(2.6rem, 1.4rem + 4.6vw, 5.4rem);
+  --fs-h2: clamp(1.8rem, 1.3rem + 1.8vw, 2.9rem);
+  --fs-h3: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.78rem;
+  /* Трекинг под Onest: у него шире родная посадка, чем у Inter Tight,
+     поэтому сжатие мягче — при −0.045em жирные буквы слипались («зн», «ол»). */
+  --track-display: -0.028em; /* герои, крупные цифры */
+  --track-title: -0.02em;    /* h2, цены, KPI */
+  --track-tight: -0.012em;   /* h3, мелкие цифры */
+
+  /* Сетка-стол */
+  --gutter: clamp(16px, 2.2vw, 28px);
+  --page: min(1320px, calc(100vw - 2 * var(--gutter)));
+  --radius-panel: 18px;
+  --radius-cell: 10px;
+  --radius-pill: 999px;
+
+  /* Движение: оверлеи 0.25s, ничего длиннее */
+  --ease-overlay: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 0.15s;
+  --t-overlay: 0.25s;
+
+  --shadow-lift: 0 24px 60px -28px rgba(14, 23, 38, 0.45);
+  --shadow-overlay: 0 25px 65px rgba(15, 24, 33, 0.29);
+}

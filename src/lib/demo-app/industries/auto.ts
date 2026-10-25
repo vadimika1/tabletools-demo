@@ -1,0 +1,67 @@
+// Автосервисы, Новосибирск. Пики — сезонная смена шин в апреле и октябре.
+import type { IndustryProfile } from '../engine/types.ts';
+
+export const auto: IndustryProfile = {
+  key: 'auto',
+  business: 'Сеть автосервисов «Мотор»',
+  city: 'Новосибирск',
+  cityIn: 'в Новосибирске',
+  checkBasis: 'booking',
+  words: {
+    visit: ['заказ-наряд', 'заказ-наряда', 'заказ-нарядов'],
+    client: ['клиент', 'клиента', 'клиентов'],
+    unit: ['пост', 'поста', 'постов'],
+    staff: ['механик', 'механика', 'механиков'],
+    location: ['автосервис', 'автосервиса', 'автосервисов'],
+  },
+  hours: [9, 21],
+  prime: { weekday: [9, 13], weekend: [10, 16] },
+  weekdayFactor: [1.1, 1.05, 1.0, 1.0, 1.05, 0.95, 0.6],
+  hourFactor: [0.9, 1.1, 1.15, 1.1, 1.0, 0.95, 1.0, 1.05, 1.05, 0.95, 0.9, 0.85],
+  monthFactor: [0.8, 0.8, 0.95, 1.3, 1.15, 0.95, 0.95, 0.95, 1.0, 1.35, 1.2, 0.9],
+  trendPerYear: 0.1,
+  payrollShare: 0.2, // механикам — процент с работ, а не с запчастей
+  adminMonth: 250_000,
+  otherMonth: 180_000,
+  discountShare: 0.03,
+  returnShare: 0.55,
+  locations: [
+    { key: 'lev', name: 'Левый берег', units: 6, load: 0.6, check: 1.0, noShow: 0.05, unanswered: 0.06, answerMin: 10, rating: 4.7, rentMonth: 450_000 },
+    { key: 'aka', name: 'Академгородок', units: 5, load: 0.56, check: 1.1, noShow: 0.04, unanswered: 0.05, answerMin: 8, rating: 4.8, rentMonth: 380_000 },
+    { key: 'cen', name: 'Центральный', units: 4, load: 0.4, check: 0.95, noShow: 0.09, unanswered: 0.17, answerMin: 35, rating: 4.3, rentMonth: 520_000 },
+  ],
+  services: [
+    { key: 'service', name: 'ТО и замена масла', price: 7500, hours: 1.5, group: 1, share: 0.28, materials: 0.4, repeatDays: 180 },
+    { key: 'diag', name: 'Диагностика', price: 2200, hours: 1, group: 1, share: 0.14, materials: 0.02, repeatDays: 365 },
+    { key: 'chassis', name: 'Ремонт ходовой', price: 16_000, hours: 3, group: 1, share: 0.14, materials: 0.4, repeatDays: 365 },
+    { key: 'tires', name: 'Шиномонтаж', price: 3000, hours: 1, group: 1, share: 0.2, materials: 0.05, repeatDays: 180 },
+    { key: 'engine', name: 'Ремонт двигателя', price: 48_000, hours: 8, group: 1, share: 0.03, materials: 0.45, repeatDays: 365 },
+    { key: 'body', name: 'Кузовной ремонт', price: 42_000, hours: 6, group: 1, share: 0.04, materials: 0.35, repeatDays: 365 },
+    { key: 'detailing', name: 'Детейлинг и полировка', price: 18_000, hours: 5, group: 1, share: 0.07, materials: 0.15, repeatDays: 365 },
+  ],
+  channels: [
+    { key: 'search', name: 'Яндекс Директ', group: 'paid', spendPerDay: 6000, share: 0.1, firstBias: 0.85, leadConv: 0.32, clickConv: 0.07, ctr: 0.05,
+      campaigns: [{ name: 'Автосервис рядом', spendShare: 0.5, salesShare: 0.55 }, { name: 'Ремонт ходовой', spendShare: 0.3, salesShare: 0.35 }, { name: 'Детейлинг', spendShare: 0.2, salesShare: 0.1 }] },
+    { key: 'avito', name: 'Авито Услуги', group: 'paid', spendPerDay: 2500, share: 0.07, firstBias: 1.2, leadConv: 0.3, clickConv: 0.08, ctr: 0.03,
+      campaigns: [{ name: 'Объявления: ремонт', spendShare: 0.7, salesShare: 0.8 }, { name: 'Объявления: шины', spendShare: 0.3, salesShare: 0.2 }] },
+    { key: 'maps', name: 'Яндекс Карты', group: 'earned', spendPerDay: 0, share: 0.1, firstBias: 0.9, leadConv: 0.35, clickConv: 0.08, ctr: 0,
+      campaigns: [{ name: 'Карточки сервисов', spendShare: 0, salesShare: 1 }] },
+    { key: '2gis', name: '2ГИС', group: 'earned', spendPerDay: 0, share: 0.06, firstBias: 0.9, leadConv: 0.33, clickConv: 0.07, ctr: 0,
+      campaigns: [{ name: 'Карточки сервисов', spendShare: 0, salesShare: 1 }] },
+    { key: 'referral', name: 'Сарафан и Drive2', group: 'earned', spendPerDay: 0, share: 0.05, firstBias: 1.4, leadConv: 0.55, clickConv: 0.1, ctr: 0,
+      campaigns: [{ name: 'Отзывы и бортжурналы', spendShare: 0, salesShare: 1 }] },
+    { key: 'vk', name: 'VK Реклама', group: 'paid', spendPerDay: 2000, share: 0.01, firstBias: 1.6, leadConv: 0.15, clickConv: 0.02, ctr: 0.009,
+      campaigns: [{ name: 'Охват: автовладельцы', spendShare: 0.75, salesShare: 0 }, { name: 'Скидка на ТО', spendShare: 0.25, salesShare: 1 }] },
+  ],
+  upsells: [
+    { name: 'Жидкости и фильтры', price: 1200, attach: 0.15 },
+    { name: 'Химчистка салона', price: 6500, attach: 0.03 },
+  ],
+  staffNames: ['Сергей Ш.', 'Андрей Б.', 'Николай В.', 'Евгений К.', 'Дмитрий Л.', 'Алексей Г.', 'Владимир С.', 'Иван П.', 'Роман Т.', 'Юрий М.', 'Максим Д.', 'Павел Р.', 'Степан Н.', 'Григорий Е.', 'Антон Ф.', 'Василий Ж.', 'Олег Ц.', 'Артём Х.'],
+  sources: ['1С:Альфа-Авто', 'Клиентикс', 'amoCRM', 'Mango Office', 'Авито', 'Яндекс Директ', 'Яндекс Метрика'],
+  systems: { booking: '1С:Альфа-Авто', crm: 'amoCRM', pos: '1С:Альфа-Авто', telephony: 'Mango Office', ads: 'Яндекс Директ', web: 'Яндекс Метрика', maps: 'Яндекс Бизнес и 2ГИС', accounting: '1С', payroll: '1С:ЗУП', messengers: 'WhatsApp' },
+  story: {
+    dip: { loc: 'aka', days: 14, factor: 0.7, reason: 'встал подъёмник на посту 3, ремонт ходовой переносили' },
+    lagging: { loc: 'cen', role: 'механик', factor: 0.6 },
+  },
+};

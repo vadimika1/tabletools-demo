@@ -1,0 +1,57 @@
+// «Другое»: нейтральный сервисный бизнес на три точки — основа для конструктора «Собери себе».
+import type { IndustryProfile } from '../engine/types.ts';
+
+export const other: IndustryProfile = {
+  key: 'other',
+  business: 'Ваш бизнес: пример на три точки',
+  city: 'Москва',
+  cityIn: 'в Москве',
+  checkBasis: 'booking',
+  words: {
+    visit: ['визит', 'визита', 'визитов'],
+    client: ['клиент', 'клиента', 'клиентов'],
+    unit: ['место', 'места', 'мест'],
+    staff: ['специалист', 'специалиста', 'специалистов'],
+    location: ['точка', 'точки', 'точек'],
+  },
+  hours: [10, 21],
+  prime: { weekday: [17, 21], weekend: [11, 18] },
+  weekdayFactor: [0.9, 0.92, 0.95, 0.98, 1.1, 1.15, 1.0],
+  hourFactor: [0.6, 0.75, 0.9, 0.95, 0.9, 0.85, 0.9, 1.05, 1.2, 1.2, 0.9],
+  monthFactor: [0.88, 0.92, 1.0, 1.0, 1.0, 0.95, 0.9, 0.92, 1.05, 1.08, 1.1, 1.2],
+  trendPerYear: 0.12,
+  payrollShare: 0.32,
+  adminMonth: 200_000,
+  otherMonth: 120_000,
+  discountShare: 0.04,
+  returnShare: 0.6,
+  locations: [
+    { key: 'a', name: 'Точка на Садовой', units: 4, load: 0.6, check: 1.1, noShow: 0.05, unanswered: 0.05, answerMin: 8, rating: 4.8, rentMonth: 450_000 },
+    { key: 'b', name: 'Точка у метро', units: 4, load: 0.54, check: 1.0, noShow: 0.06, unanswered: 0.07, answerMin: 12, rating: 4.7, rentMonth: 350_000 },
+    { key: 'c', name: 'Точка в спальном районе', units: 3, load: 0.4, check: 0.9, noShow: 0.1, unanswered: 0.15, answerMin: 30, rating: 4.4, rentMonth: 260_000 },
+  ],
+  services: [
+    { key: 'main', name: 'Основная услуга', price: 3500, hours: 1, group: 1, share: 0.5, materials: 0.1, repeatDays: 45 },
+    { key: 'extended', name: 'Расширенная услуга', price: 6500, hours: 1.5, group: 1, share: 0.2, materials: 0.12, repeatDays: 60 },
+    { key: 'express', name: 'Экспресс-услуга', price: 1800, hours: 0.5, group: 1, share: 0.2, materials: 0.08, repeatDays: 30 },
+    { key: 'consult', name: 'Консультация', price: 1000, hours: 0.5, group: 1, share: 0.1, materials: 0, repeatDays: 90 },
+  ],
+  channels: [
+    { key: 'search', name: 'Яндекс Директ', group: 'paid', spendPerDay: 3500, share: 0.1, firstBias: 0.85, leadConv: 0.3, clickConv: 0.06, ctr: 0.045,
+      campaigns: [{ name: 'Услуги рядом', spendShare: 0.7, salesShare: 0.8 }, { name: 'Конкуренты', spendShare: 0.3, salesShare: 0.2 }] },
+    { key: 'vk', name: 'VK Реклама', group: 'paid', spendPerDay: 2500, share: 0.03, firstBias: 1.5, leadConv: 0.2, clickConv: 0.03, ctr: 0.01,
+      campaigns: [{ name: 'Акция месяца', spendShare: 0.5, salesShare: 1 }, { name: 'Охват', spendShare: 0.5, salesShare: 0 }] },
+    { key: 'maps', name: 'Яндекс Карты и 2ГИС', group: 'earned', spendPerDay: 0, share: 0.12, firstBias: 0.9, leadConv: 0.35, clickConv: 0.08, ctr: 0,
+      campaigns: [{ name: 'Карточки точек', spendShare: 0, salesShare: 1 }] },
+    { key: 'referral', name: 'Рекомендации', group: 'earned', spendPerDay: 0, share: 0.06, firstBias: 1.3, leadConv: 0.5, clickConv: 0.1, ctr: 0,
+      campaigns: [{ name: 'Приведи друга', spendShare: 0, salesShare: 1 }] },
+  ],
+  upsells: [{ name: 'Сопутствующие товары', price: 1200, attach: 0.08 }],
+  staffNames: ['Анна С.', 'Илья К.', 'Мария Л.', 'Денис П.', 'Ольга Р.', 'Сергей Т.', 'Елена Б.', 'Павел Н.', 'Татьяна Д.', 'Артём В.', 'Юлия Г.', 'Никита М.'],
+  sources: ['CRM', 'Онлайн-запись', 'Касса', 'Телефония', 'Яндекс Директ', 'Яндекс Метрика', 'Google Таблицы'],
+  systems: { booking: 'Онлайн-запись', crm: 'CRM', pos: 'Касса', telephony: 'Телефония', ads: 'Яндекс Директ', web: 'Яндекс Метрика', maps: 'Яндекс Карты', accounting: 'Бухгалтерия', payroll: 'Зарплатная ведомость', messengers: 'Мессенджеры' },
+  story: {
+    dip: { loc: 'b', days: 14, factor: 0.72, reason: 'ушёл сильный специалист, его клиенты не перезаписались' },
+    lagging: { loc: 'c', role: 'специалист', factor: 0.65 },
+  },
+};

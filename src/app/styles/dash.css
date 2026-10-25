@@ -1,0 +1,282 @@
+/* Кит дашбордов TableTools: листы на столе. Тёмный «стол» (остров) держит светлые листы-карточки.
+   Палитры графиков проверены validate_palette (dataviz): светлая на --paper, тёмная на --ink-2.
+   Эффекты стекла и дрейфа — только под pointer: fine (на iPhone backdrop-filter роняет вкладку). */
+
+.ds {
+  --ds-canvas: var(--ivory);
+  --ds-sheet: var(--paper);
+  --ds-ink-1: var(--ink);
+  --ds-ink-2: var(--steel-dark);
+  --ds-ink-3: #7a8191; /* оси и подписи второго плана */
+  --ds-grid: #ece5d8;
+  --ds-base: #d6ccba;
+  --ds-hover: rgba(14, 23, 38, 0.045);
+  --ds-line: var(--line);
+  --ds-good: var(--good);
+  --ds-bad: var(--bad);
+  --ds-warn: #9a6a14;
+  --ds-accent: var(--gold);
+  --ds-accent-ink: var(--gold-deep);
+  /* Категориальные серии: порядок фиксирован, цвет следует за сущностью, а не за местом в рейтинге */
+  --ds-s1: #2f6fb0;
+  --ds-s2: #bd7a24;
+  --ds-s3: #1f9a7a;
+  --ds-s4: #8b5fbf;
+  --ds-s5: #d9668f;
+  --ds-s6: #6f8f2e;
+  --ds-muted: #b9b1a2; /* прошлый период и «остальное» */
+  /* Порядковая шкала чернил: воронки, ступени */
+  --ds-o1: #96a8c6;
+  --ds-o2: #7188ad;
+  --ds-o3: #526b95;
+  --ds-o4: #36507c;
+  --ds-o5: #1f3559;
+  --ds-r-sheet: 20px;
+  --ds-r-island: 28px;
+  --ds-r-cell: 10px;
+  --ds-shadow: 0 1px 0 rgba(14, 23, 38, 0.04), 0 14px 32px -22px rgba(14, 23, 38, 0.45);
+  --ds-shadow-lift: 0 2px 0 rgba(14, 23, 38, 0.04), 0 22px 40px -22px rgba(14, 23, 38, 0.5);
+  --ds-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-gap: clamp(12px, 1.4vw, 18px);
+  color: var(--ds-ink-1);
+}
+
+/* Тёмные поверхности: главная плитка, полоса, остров без листов */
+.ds-dark {
+  --ds-sheet: var(--ink-2);
+  --ds-ink-1: var(--ivory);
+  --ds-ink-2: #b7bfcc;
+  --ds-ink-3: #8a94a6;
+  --ds-grid: #22304a;
+  --ds-base: #2c3b58;
+  --ds-hover: rgba(244, 239, 230, 0.06);
+  --ds-line: var(--line-dark);
+  --ds-good: #5fbf86;
+  --ds-bad: #e08a72;
+  --ds-warn: #e3b25c;
+  --ds-s1: #4a82c4;
+  --ds-s2: #c2842f;
+  --ds-s3: #1f9676;
+  --ds-s4: #8c6fd0;
+  --ds-s5: #d2688f;
+  --ds-s6: #789a36;
+  --ds-muted: #4b5a74;
+  color: var(--ds-ink-1);
+}
+
+/* ── Лист (блок) ─────────────────────────────────────────────── */
+.ds-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: clamp(16px, 1.6vw, 24px);
+  border-radius: var(--ds-r-sheet);
+  background: var(--ds-sheet);
+  box-shadow: var(--ds-shadow);
+}
+.ds-sheet.ds-dark { background: linear-gradient(160deg, var(--ink-3), var(--ink-2) 60%); }
+.ds-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; }
+.ds-head-text { min-width: 0; flex: 1 1 260px; }
+.ds-title { font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.18rem); font-weight: 650; letter-spacing: var(--track-tight); line-height: 1.25; }
+.ds-question { margin-top: 4px; font-size: var(--fs-small); color: var(--ds-ink-2); line-height: 1.45; max-width: 62ch; }
+.ds-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; max-width: 100%; }
+.ds-body { min-width: 0; max-width: 100%; }
+.ds-foot { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; font-size: var(--fs-micro); color: var(--ds-ink-3); }
+.ds-source { padding: 3px 9px; border-radius: var(--radius-pill); background: var(--ds-hover); color: var(--ds-ink-2); white-space: nowrap; }
+
+/* ── Остров: тёмный стол, на котором лежат листы ─────────────── */
+.ds-island {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--ds-r-island);
+  background: radial-gradient(120% 140% at 0% 0%, #1b2740 0%, var(--ink) 55%);
+  box-shadow: 0 30px 60px -40px rgba(14, 23, 38, 0.8);
+}
+.ds-island-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 12px 2px; color: var(--ivory); }
+.ds-island-head h2 { font-size: 1rem; font-weight: 600; }
+.ds-island-head p { font-size: var(--fs-micro); color: #aab3c2; }
+.ds-island .ds-sheet { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 30px -18px rgba(0, 0, 0, 0.6); }
+
+/* ── Сетка раздела: размеры от ширины самой сетки (контейнер), а не окна —
+   те же блоки стоят в разделе, в превью конструктора и в панели детализации ── */
+.ds-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--ds-gap); container-type: inline-size; }
+.ds-grid > * { grid-column: span 12; }
+@container (min-width: 720px) {
+  .ds-grid > .w-3, .ds-grid > .w-4, .ds-grid > .w-5, .ds-grid > .w-6, .ds-grid > .w-7 { grid-column: span 6; }
+}
+@container (min-width: 1040px) {
+  .ds-grid > .w-3 { grid-column: span 3; }
+  .ds-grid > .w-4 { grid-column: span 4; }
+  .ds-grid > .w-5 { grid-column: span 5; }
+  .ds-grid > .w-7 { grid-column: span 7; }
+  .ds-grid > .w-8 { grid-column: span 8; }
+  .ds-grid > .w-9 { grid-column: span 9; }
+  .ds-grid > .w-10 { grid-column: span 10; }
+  .ds-grid > .w-11 { grid-column: span 11; }
+}
+.ds-island.cols-2 { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1100px) { .ds-island.cols-2 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+
+/* ── Плитка-показатель ───────────────────────────────────────── */
+.ds-stats { display: grid; gap: var(--ds-gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 176px), 1fr)); }
+@media (max-width: 559px) {
+  .ds-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-stats > .is-hero, .ds-stats > :has(> .is-hero) { grid-column: 1 / -1; }
+  .ds-stat { padding: 14px; }
+}
+.ds-stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 18px 18px 16px;
+  border: 0;
+  border-radius: var(--ds-r-sheet);
+  background: var(--ds-sheet);
+  box-shadow: var(--ds-shadow);
+  color: var(--ds-ink-1); /* токены пересчитываются на самом элементе: у .ds-dark это слоновая кость */
+  font: inherit;
+  text-align: left;
+  container-type: inline-size;
+}
+@media (min-width: 560px) { .ds-stats > .is-hero, .ds-stats > :has(> .is-hero) { grid-column: span 2; } }
+.ds-stat.ds-dark { background: radial-gradient(130% 120% at 100% 0%, #2a3a5c 0%, var(--ink-2) 60%); }
+button.ds-stat { cursor: pointer; }
+.ds-stat-label { font-size: var(--fs-small); color: var(--ds-ink-2); line-height: 1.3; }
+.ds-stat-value {
+  font-size: min(2.05rem, 17cqi); /* от ширины самой плитки: «1,52 млн ₽» влезает впритык */
+  font-weight: 650;
+  letter-spacing: var(--track-title);
+  line-height: 1.05;
+  font-variant-numeric: proportional-nums; /* крупные числа — пропорциональные цифры */
+  white-space: nowrap;
+}
+.ds-stat.is-hero .ds-stat-value { font-size: min(3.1rem, 14cqi); }
+.ds-stat-note { font-size: var(--fs-micro); color: var(--ds-ink-3); line-height: 1.35; }
+.ds-stat .ds-spark { margin-top: 4px; }
+.ds-stat .ds-custom { position: absolute; top: 12px; right: 12px; }
+
+/* ── Изменение: цвет по смыслу для бизнеса + значок, не только цвет ── */
+.ds-delta { display: block; font-size: var(--fs-micro); line-height: 1.4; color: var(--ds-ink-3); font-variant-numeric: tabular-nums; }
+.ds-delta b { font-weight: 650; margin-right: 4px; }
+.ds-delta.good b { color: var(--ds-good); }
+.ds-delta.bad b { color: var(--ds-bad); }
+.ds-delta svg { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
+.ds-delta.good svg { color: var(--ds-good); }
+.ds-delta.bad svg { color: var(--ds-bad); }
+
+/* ── Чип «Под вас» ───────────────────────────────────────────── */
+.ds-custom { position: relative; z-index: 2; }
+.ds-custom-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px 4px 7px;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
+  color: var(--ds-accent-ink);
+  font-size: 0.74rem; font-weight: 600; line-height: 1.2; white-space: nowrap;
+  transition: background var(--t-fast), transform 0.3s var(--ds-spring);
+}
+.ds-dark .ds-custom-btn { color: var(--gold-soft); }
+.ds-custom-btn svg { width: 12px; height: 12px; }
+.ds-custom-pop {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  width: min(300px, calc(100vw - 48px));
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--ivory);
+  font-size: var(--fs-small); line-height: 1.5;
+  box-shadow: var(--shadow-overlay, 0 20px 50px -20px rgba(0, 0, 0, 0.5));
+  animation: ds-pop 0.22s var(--ds-ease);
+}
+.ds-custom-pop b { display: block; margin-bottom: 4px; color: var(--gold-soft); font-weight: 600; }
+@keyframes ds-pop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } }
+
+/* ── Переключатели внутри блока ──────────────────────────────── */
+.ds-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: var(--radius-pill); background: var(--ds-hover); }
+.ds-seg::-webkit-scrollbar { display: none; }
+.ds-seg button {
+  padding: 5px 11px; border: 0; border-radius: var(--radius-pill); background: transparent;
+  color: var(--ds-ink-2); font-size: 0.8rem; font-weight: 550; white-space: nowrap;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.ds-seg button[aria-pressed='true'] { background: var(--ds-sheet); color: var(--ds-ink-1); box-shadow: 0 1px 3px rgba(14, 23, 38, 0.12); }
+.ds-dark .ds-seg button[aria-pressed='true'] { background: var(--ink-3); }
+.ds-link { border: 0; background: none; padding: 0; color: var(--ds-ink-2); font-size: 0.8rem; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--ds-line); }
+
+/* ── Табличный вид (двойник графика) и таблицы блоков ────────── */
+.ds-table-wrap {
+  overflow-x: auto; margin: 0 calc(-1 * clamp(16px, 1.6vw, 24px)); padding: 0 clamp(16px, 1.6vw, 24px);
+  /* Тени по краям появляются, только когда таблицу можно прокрутить в эту сторону:
+     светлые заливки едут вместе с содержимым (local) и закрывают тени у краёв. */
+  background:
+    linear-gradient(to right, var(--ds-sheet) 40%, transparent) left / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--ds-sheet) 40%, transparent) right / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(14, 23, 38, 0.16), transparent) left / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(14, 23, 38, 0.16), transparent) right / 14px 100% no-repeat scroll;
+}
+.ds-table { width: 100%; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
+.ds-table th { padding: 8px 10px; text-align: left; vertical-align: bottom; font-weight: 550; line-height: 1.3; color: var(--ds-ink-3); border-bottom: 1px solid var(--ds-grid); min-width: 5.5em; }
+.ds-table th:first-child { min-width: 7em; }
+.ds-table td { padding: 10px; border-bottom: 1px solid var(--ds-grid); white-space: nowrap; }
+.ds-table tr:last-child td { border-bottom: 0; }
+.ds-table .num { text-align: right; }
+.ds-table tbody tr.is-link { cursor: pointer; transition: background var(--t-fast); }
+.ds-table tbody tr.is-link:hover { background: var(--ds-hover); }
+.ds-table tfoot td { font-weight: 650; border-top: 1px solid var(--ds-base); border-bottom: 0; }
+
+/* ── Смена данных: прошлый кадр держится приглушённым, новое проявляется из размытия ── */
+.ds-swap { animation: ds-swap 0.42s var(--ds-ease); }
+@keyframes ds-swap { from { opacity: 0.35; filter: blur(4px); } }
+
+/* ── Наведение с пружиной и стекло — только там, где есть точная мышь ── */
+@media (hover: hover) and (pointer: fine) {
+  button.ds-stat { transition: transform 0.45s var(--ds-spring), box-shadow 0.3s; }
+  button.ds-stat:hover { transform: translateY(-3px); box-shadow: var(--ds-shadow-lift); }
+  .ds-custom-btn:hover { background: color-mix(in srgb, var(--gold) 20%, transparent); transform: translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds *, .ds *::before, .ds *::after { animation: none !important; transition: none !important; }
+}
+
+/* Ряд «главная + пять»: по ширине ячейки — в одну строку на широком месте, иначе по три или по два */
+@container (min-width: 620px) {
+  .ds-stats.is-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ds-stats.is-row > .is-hero, .ds-stats.is-row > :has(> .is-hero) { grid-column: span 1; }
+}
+@container (min-width: 1080px) {
+  .ds-stats.is-row { grid-template-columns: minmax(0, 1.7fr) repeat(5, minmax(0, 1fr)); }
+}
+/* Ячейка сетки вокруг блока: размер из реестра, блок растягивается на всю высоту ряда */
+.ds-cell { display: grid; min-width: 0; container-type: inline-size; }
+.ds-cell > * { min-width: 0; }
+
+/* Стопки внутри блока — грид в одну колонку. Неявная колонка auto растягивается по содержимому
+   и выталкивает лист за край экрана; minmax(0, 1fr) держит её в ширине листа. */
+.ds-body [class$='-stack'], .ds-body [class*='-stack '] { grid-template-columns: minmax(0, 1fr); }
+
+/* Таблица не помещается в блок — строки становятся карточками: первая колонка заголовком,
+   остальные значения с подписями. Шапка остаётся для экранных читалок. */
+.ds-table.is-stacked thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.ds-table.is-stacked, .ds-table.is-stacked tbody, .ds-table.is-stacked tfoot { display: block; }
+.ds-table.is-stacked tr {
+  /* 104px — две колонки уже на телефоне 320: иначе каждое значение отдельной строкой и карточка в экран высотой */
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px 14px;
+  padding: 12px 10px; border-bottom: 1px solid var(--ds-grid);
+}
+.ds-table.is-stacked tbody tr.is-link { border-radius: 10px; }
+.ds-table.is-stacked td { display: grid; gap: 1px; padding: 0; border: 0; text-align: left; white-space: normal; min-width: 0; }
+.ds-table.is-stacked td::before { content: attr(data-label); font-size: 0.72rem; font-weight: 500; color: var(--ds-ink-3); }
+.ds-table.is-stacked td:first-child { grid-column: 1 / -1; font-weight: 600; font-size: 0.95rem; }
+.ds-table.is-stacked td:first-child::before { display: none; }
+.ds-table.is-stacked tfoot tr { border-bottom: 0; border-top: 1px solid var(--ds-base); background: var(--ds-hover); border-radius: 10px; }
+.ds-table.is-stacked tfoot td { border: 0; }
+.ds-table.is-stacked td:empty { display: none; }
+.ds-table.is-stacked td:first-child { display: block; }

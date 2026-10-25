@@ -1,0 +1,61 @@
+/* Блоки финансов и клиентов: подпись-ответ, ряд цифр, пометки-вердикты, раскрывающийся P&L,
+   кнопка действия и её ответ. Цвета и размеры — токены кита (dash.css). */
+
+.bf-stack { display: grid; gap: 16px; min-width: 0; }
+.bf-note { font-size: var(--fs-small); color: var(--ds-ink-2); line-height: 1.55; max-width: 72ch; }
+.bf-note b { color: var(--ds-ink-1); font-weight: 650; }
+.bf-hint { margin-bottom: 6px; font-size: var(--fs-micro); color: var(--ds-ink-3); }
+
+/* Пометка-вердикт: всегда значок и текст, цвет — не единственный признак */
+.bf-flag { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-micro); font-weight: 650; line-height: 1.3; white-space: nowrap; vertical-align: baseline; }
+.bf-flag svg { width: 11px; height: 11px; flex: none; }
+.bf-flag.is-good { color: var(--ds-good); }
+.bf-flag.is-bad { color: var(--ds-bad); }
+.bf-flag.is-warn { color: var(--ds-warn); }
+
+/* Ряд крупных цифр внутри блока */
+.bf-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px 20px; margin: 0; }
+.bf-fig { display: grid; gap: 4px; min-width: 0; }
+.bf-fig dt { font-size: var(--fs-small); color: var(--ds-ink-2); }
+.bf-fig dd { display: grid; gap: 2px; margin: 0; }
+.bf-fig b { font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.65rem); font-weight: 650; letter-spacing: var(--track-title); line-height: 1.1; }
+.bf-fig small { font-size: var(--fs-micro); color: var(--ds-ink-3); line-height: 1.35; }
+
+/* Ячейка с подписью второй строкой: показатель и его единица, партнёр и пометка */
+.bf-cell { display: grid; gap: 2px; white-space: normal; min-width: 12ch; }
+.bf-cell small { font-size: var(--fs-micro); color: var(--ds-ink-3); }
+
+/* P&L по точкам */
+.bf-loc { display: flex; align-items: center; gap: 8px; }
+.bf-loc > span { display: grid; gap: 2px; }
+.bf-loc small { font-size: var(--fs-micro); color: var(--ds-ink-3); font-weight: 400; }
+.bf-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; }
+.bf-expand {
+  flex: none; display: grid; place-items: center;
+  width: 24px; height: 24px; padding: 0;
+  border: 1px solid var(--ds-grid); border-radius: 50%;
+  background: var(--ds-sheet); color: var(--ds-ink-2);
+  cursor: pointer;
+}
+.bf-expand svg { width: 12px; height: 12px; transition: transform 0.25s var(--ds-ease); }
+.bf-expand[aria-expanded='true'] svg { transform: rotate(90deg); }
+.bf-expand:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 2px; }
+.bf-pnl .bf-sub td { padding-top: 6px; padding-bottom: 6px; font-size: var(--fs-micro); color: var(--ds-ink-2); background: var(--ds-hover); }
+.bf-pnl .bf-sub td:first-child { padding-left: 50px; }
+.bf-pnl tbody tr.is-link:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: -2px; }
+
+/* Действие в демо и честный ответ, что ничего не ушло */
+.bf-action { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.bf-btn { min-height: 40px; padding: 0 18px; font-size: var(--fs-small); }
+.bf-btn:disabled { opacity: 0.55; cursor: default; }
+.bf-notice:empty { display: none; }
+.bf-notice {
+  flex: 1 1 260px;
+  padding: 10px 14px;
+  border-radius: var(--ds-r-cell);
+  background: var(--ds-hover);
+  font-size: var(--fs-small);
+  color: var(--ds-ink-2);
+  line-height: 1.45;
+  animation: ds-pop 0.22s var(--ds-ease);
+}

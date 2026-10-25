@@ -1,0 +1,126 @@
+/* Блоки «Операционки»: цифры в строку внутри листа, строки «значение против цели»,
+   флажки вердикта, полоса отзывов и лента. Цвета — только токены кита (.ds / .ds-dark). */
+
+/* ── Главная цифра в тёмном листе (p1) ───────────────────────── */
+.op-hero {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.op-hero-label { font-size: var(--fs-small); color: var(--ds-ink-2); }
+.op-hero-value {
+  font-size: clamp(2rem, 1.4rem + 1.8vw, 3rem);
+  font-weight: 650;
+  letter-spacing: var(--track-title);
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.op-hero-note { font-size: var(--fs-micro); color: var(--ds-ink-3); line-height: 1.4; }
+
+/* ── Вывод блока ─────────────────────────────────────────────── */
+.op-note { margin: 0; font-size: var(--fs-small); line-height: 1.5; color: var(--ds-ink-2); max-width: 70ch; }
+.op-note .ds-link { font-size: inherit; }
+
+/* ── Цифры в строку, без карточек ────────────────────────────── */
+.op-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 14px 20px; margin: 0; }
+.op-fig { display: grid; align-content: start; gap: 3px; min-width: 0; }
+.op-fig dt { font-size: var(--fs-micro); color: var(--ds-ink-2); line-height: 1.3; }
+.op-fig dd { margin: 0; }
+.op-fig-value { font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem); font-weight: 650; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.op-fig-note { font-size: var(--fs-micro); color: var(--ds-ink-3); line-height: 1.35; }
+
+/* ── Флажок вердикта: значок + слово, цвет не единственный ключ ── */
+.op-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px 1px 5px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+.op-flag svg { width: 10px; height: 10px; flex: none; }
+.op-flag.is-bad { color: var(--ds-bad); background: color-mix(in srgb, var(--ds-bad) 11%, transparent); }
+.op-flag.is-warn { color: var(--ds-warn); background: color-mix(in srgb, var(--ds-warn) 12%, transparent); }
+.op-flag.is-good { color: var(--ds-good); background: color-mix(in srgb, var(--ds-good) 11%, transparent); }
+
+/* ── Строки «значение против цели» ───────────────────────────── */
+.op-meters { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.op-meters-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(72px, 1.4fr) auto minmax(92px, auto);
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: var(--ds-r-cell);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.op-meters-row.is-link { cursor: pointer; transition: background var(--t-fast); }
+.op-meters-row.is-link:hover { background: var(--ds-hover); }
+.op-meters-label { display: grid; gap: 1px; min-width: 0; font-size: var(--fs-small); }
+.op-meters-label small { font-size: var(--fs-micro); color: var(--ds-ink-3); line-height: 1.35; }
+.op-meters-row > b { font-size: var(--fs-small); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.op-meters-flag { justify-self: end; }
+@media (max-width: 559px) {
+  .op-meters-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .op-meters-bar { grid-column: 1 / -1; grid-row: 2; }
+  .op-meters-flag { grid-column: 1 / -1; justify-self: start; }
+}
+.op-target-key { display: flex; align-items: center; gap: 8px; margin: 0; font-size: var(--fs-micro); color: var(--ds-ink-3); }
+.op-target-key i { width: 2px; height: 12px; border-radius: 1px; background: var(--ds-ink-1); }
+
+/* ── Отзывы: тёмная полоса, звёзды по точкам, лента ──────────── */
+.op-band { padding: 14px 16px; border-radius: 14px; background: linear-gradient(160deg, var(--ink-3), var(--ink-2) 60%); }
+.op-stars { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.op-stars-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(90px, 1.6fr) auto minmax(96px, auto);
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: var(--ds-r-cell);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--fs-small);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+.op-stars-row:hover { background: var(--ds-hover); }
+.op-stars-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.op-stars-row > b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.op-stars-row > small { font-size: var(--fs-micro); color: var(--ds-ink-3); text-align: right; white-space: nowrap; }
+@media (max-width: 559px) {
+  .op-stars-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .op-starbar { grid-column: 1 / -1; grid-row: 2; }
+  .op-stars-row > small { grid-column: 1 / -1; text-align: left; }
+}
+.op-starbar { display: flex; gap: 2px; height: 10px; border-radius: 5px; overflow: hidden; }
+.op-starbar i { min-width: 3px; }
+.op-starbar.is-empty { background: var(--ds-hover); }
+
+.op-feed { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.op-feed li { padding: 12px 14px; border-radius: 12px; background: var(--ds-hover); }
+.op-feed li.is-low { background: color-mix(in srgb, var(--ds-bad) 7%, transparent); }
+.op-feed-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: var(--fs-micro); color: var(--ds-ink-3); }
+.op-feed-head b { color: var(--ds-ink-1); font-weight: 600; }
+.op-feed-stars { color: var(--ds-accent-ink); letter-spacing: 1px; }
+.op-feed-stars span { color: var(--ds-base); }
+.op-feed p { margin: 6px 0 0; font-size: var(--fs-small); line-height: 1.5; color: var(--ds-ink-1); }

@@ -1,0 +1,30 @@
+/* Раздел демо «CRM»: доска сделок (r1), задачи (r2), карточка клиента (r4), склад (r5).
+   Колонки доски и карточки сделок — общие со страницами CRM-услуг (inner.css: .crm-*). */
+.rb-board { grid-auto-columns: minmax(180px, 1fr); margin-top: 0; }
+.rb-board .crm-deal { background: var(--ds-sheet, #fff); }
+.rb-deal-loc { font-size: var(--fs-micro); color: var(--ds-ink-3); }
+.rb-late { font-style: normal; color: var(--bad); font-weight: 600; }
+
+.rb-tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rb-tasks li { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--ds-grid); }
+.rb-tasks li.is-late { border-color: rgba(180, 83, 60, 0.45); box-shadow: inset 3px 0 0 var(--bad); }
+.rb-tasks b { font-size: var(--fs-small); font-weight: 650; }
+.rb-tasks span { font-size: var(--fs-micro); color: var(--ds-ink-2); }
+.rb-tasks .bf-flag { justify-self: start; }
+
+.rb-client { display: flex; gap: 12px; align-items: center; }
+.rb-client > div { display: grid; gap: 2px; min-width: 0; }
+.rb-client b { font-size: 1.05rem; font-weight: 650; }
+.rb-client span:not(.rb-ava) { font-size: var(--fs-small); color: var(--ds-ink-2); }
+.rb-ava { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--gold); font-weight: 700; }
+.rb-timeline { list-style: none; margin: 0; padding: 0 0 0 14px; display: grid; gap: 10px; border-left: 2px solid var(--ds-grid); }
+.rb-timeline li { position: relative; display: grid; gap: 1px; font-size: var(--fs-small); }
+.rb-timeline li::before { content: ''; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ds-grid); }
+.rb-timeline li.is-visit::before { background: var(--good); }
+.rb-timeline li.is-call::before { background: var(--gold); }
+.rb-timeline time { font-size: var(--fs-micro); color: var(--ds-ink-3); }
+.rb-timeline b { font-weight: 650; }
+.rb-next { padding: 10px 12px; border-radius: 12px; background: rgba(201, 164, 92, 0.12); color: var(--gold-deep); font-size: var(--fs-small); font-weight: 600; }
+.rb-next.is-late { background: rgba(180, 83, 60, 0.1); color: var(--bad); }
+
+.rb-short { color: var(--bad); font-weight: 650; }
